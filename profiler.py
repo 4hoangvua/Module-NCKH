@@ -83,18 +83,27 @@ class HardwareProfiler:
         """Vòng lặp lấy mẫu tài nguyên chạy nền."""
         while self.is_running:
             try:
-                # 1. Đo RAM Process (RSS)
+                # 1. Đo RAM Process (RSS) bao gồm cả tiến trình con
                 if self.process:
                     mem_rss = self.process.memory_info().rss
+                    try:
+                        for child in self.process.children(recursive=True):
+                            try:
+                                mem_rss += child.memory_info().rss
+                            except Exception:
+                                pass
+                    except Exception:
+                        pass
+
                     if mem_rss > self.peak_ram:
                         self.peak_ram = mem_rss
 
                     # 2. Đo CPU %
                     cpu_p = self.process.cpu_percent(interval=None)
-                    if cpu_p > 0.0:
+                    if cpu_p >= 0.0:
                         self.cpu_samples.append(cpu_p)
 
-                # 3. Đo GPU VRAM qua NVML (Chính xác cho mọi framework: CTranslate2, DirectML, PyTorch)
+                # 3. Đo GPU VRAM qua NVML (NVIDIA) hoặc PyTorch CUDA
                 if self._nvml_handle:
                     mem_info = pynvml.nvmlDeviceGetMemoryInfo(self._nvml_handle)
                     used_vram = mem_info.used
@@ -103,7 +112,7 @@ class HardwareProfiler:
                     delta_vram = used_vram - self.init_vram
                     if delta_vram > self.peak_vram:
                         self.peak_vram = delta_vram
-                        if delta_vram > 20 * 1024 * 1024:  # Tăng > 20MB VRAM
+                        if delta_vram > 20 * 1024 * 1024:
                             self.has_gpu_usage = True
 
                 elif HAS_TORCH_CUDA:
@@ -162,6 +171,14 @@ class HardwareProfiler:
         try:
             if self.process:
                 mem_rss = self.process.memory_info().rss
+                try:
+                    for child in self.process.children(recursive=True):
+                        try:
+                            mem_rss += child.memory_info().rss
+                        except Exception:
+                            pass
+                except Exception:
+                    pass
                 if mem_rss > self.peak_ram:
                     self.peak_ram = mem_rss
 
@@ -179,14 +196,17 @@ class HardwareProfiler:
         elapsed_sec = max(0.001, self.end_time - self.start_time)
         peak_ram_mb = (self.peak_ram / (1024 * 1024)) if self.peak_ram > 0 else 0.0
         ram_delta_mb = max(0.0, (self.peak_ram - self.init_ram) / (1024 * 1024)) if self.peak_ram > 0 else 0.0
-        avg_cpu = sum(self.cpu_samples) / len(self.cpu_samples) if self.cpu_samples else (psutil.cpu_percent() if HAS_PSUTIL else 0.0)
-        cpu_cores = psutil.cpu_count(logical=True) if HAS_PSUTIL else os.cpu_count() or 4
+        
+        cpu_cores = psutil.cpu_count(logical=True) if HAS_PSUTIL else (os.cpu_count() or 4)
+        raw_avg_cpu = sum(self.cpu_samples) / max(len(self.cpu_samples), 1) if self.cpu_samples else (psutil.cpu_percent() if HAS_PSUTIL else 0.0)
+        normalized_cpu = min(100.0, raw_avg_cpu / max(cpu_cores, 1))
 
         stats = {
             "elapsed_sec": round(elapsed_sec, 3),
             "peak_ram_mb": round(peak_ram_mb, 2),
             "ram_delta_mb": round(ram_delta_mb, 2),
-            "avg_cpu_percent": round(avg_cpu, 1),
+            "avg_cpu_percent": round(normalized_cpu, 1),
+            "raw_cpu_percent": round(raw_avg_cpu, 1),
             "cpu_cores": cpu_cores,
             "has_gpu": self.has_gpu_usage,
             "gpu_name": self.gpu_device_name if self.has_gpu_usage else None,
@@ -204,17 +224,7 @@ class HardwareProfiler:
         forced_gpu_name: str | None = None,
     ):
         """In bảng báo cáo tổng hợp chuẩn NCKH (Độ chính xác + Tốc độ + Phần cứng)."""
-        stats = self.stop() if self.is_running else {
-            "elapsed_sec": max(0.001, self.end_time - self.start_time),
-            "peak_ram_mb": round(self.peak_ram / (1024 * 1024), 2) if self.peak_ram > 0 else 0.0,
-            "ram_delta_mb": round(max(0.0, self.peak_ram - self.init_ram) / (1024 * 1024), 2) if self.peak_ram > 0 else 0.0,
-            "avg_cpu_percent": round(sum(self.cpu_samples) / max(len(self.cpu_samples), 1), 1) if self.cpu_samples else 0.0,
-            "cpu_cores": psutil.cpu_count(logical=True) if HAS_PSUTIL else 4,
-            "has_gpu": self.has_gpu_usage or bool(forced_gpu_name),
-            "gpu_name": forced_gpu_name or self.gpu_device_name,
-            "peak_vram_mb": round(self.peak_vram / (1024 * 1024), 2) if self.has_gpu_usage else 0.0,
-            "peak_vram_gb": round(self.peak_vram / (1024 * 1024 * 1024), 3) if self.has_gpu_usage else 0.0,
-        }
+        stats = self.stop() if self.is_running else self.stop()
 
         print("\n" + "=" * 65)
         print(f"  📊 BÁO CÁO THỰC NGHIỆM NCKH: {task_name.upper()}")
@@ -252,14 +262,17 @@ class HardwareProfiler:
         # 3. TIÊU THỤ TÀI NGUYÊN HỆ THỐNG (RESOURCE FOOTPRINT)
         print("-" * 65)
         print("  3. TIÊU THỤ TÀI NGUYÊN PHẦN CỨNG (RESOURCE FOOTPRINT)")
-        print(f"  • Tải CPU trung bình                   : {stats['avg_cpu_percent']:.1f}% ({stats['cpu_cores']} logical cores)")
+        print(f"  • Tải CPU trung bình                   : {stats['avg_cpu_percent']:.1f}% (trên {stats['cpu_cores']} logical cores)")
         print(f"  • Dung lượng RAM đỉnh (Peak RAM)       : {stats['peak_ram_mb']:,.2f} MB")
         print(f"  • Mức tăng RAM thực tế (RAM Delta)     : +{stats['ram_delta_mb']:,.2f} MB")
 
-        if (stats["has_gpu"] or forced_gpu_name) and stats["gpu_name"]:
-            print(f"  • Thiết bị phần cứng (Hardware Mode)   : 🚀 GPU NVIDIA ({stats['gpu_name']})")
+        detected_gpu = forced_gpu_name or stats["gpu_name"]
+        if stats["has_gpu"] and detected_gpu:
+            print(f"  • Thiết bị phần cứng (Hardware Mode)   : 🚀 GPU ({detected_gpu})")
             if stats['peak_vram_mb'] > 0:
                 print(f"  • Bộ nhớ GPU đỉnh (Peak VRAM)          : {stats['peak_vram_mb']:,.2f} MB ({stats['peak_vram_gb']:.2f} GB)")
+        elif sys.platform == "darwin":
+            print(f"  • Thiết bị phần cứng (Hardware Mode)   : 💻 Apple Silicon / Unified Memory")
         else:
             print(f"  • Thiết bị phần cứng (Hardware Mode)   : 💻 CPU Only (Không chiếm dụng VRAM GPU)")
 

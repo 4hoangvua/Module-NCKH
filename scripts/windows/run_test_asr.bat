@@ -1,13 +1,14 @@
 @echo off
-chcp 65001 >nul
+setlocal
 cd /d "%~dp0..\.."
 cls
+
 echo ========================================================
-echo           KIỂM THỬ NHẬN DẠNG GIỌNG NÓI (ASR)
+echo           KIEM THU NHAN DANG GIONG NOI (ASR)
 echo ========================================================
 echo.
 
-REM Ưu tiên sử dụng python trong venv nếu đã cài đặt
+REM Uu tien su dung python trong venv neu da cai dat
 set PYTHON_EXE=python
 if exist "venv\Scripts\python.exe" (
     set PYTHON_EXE=venv\Scripts\python.exe

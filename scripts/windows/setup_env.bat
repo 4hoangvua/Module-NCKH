@@ -1,34 +1,36 @@
 @echo off
-chcp 65001 >nul
+setlocal
 cd /d "%~dp0..\.."
 
 echo ========================================================
-echo        KHỞI TẠO MÔI TRƯỜNG CHO DỰ ÁN ASR - OCR (WINDOWS)
+echo        KHOI TAO MOI TRUONG ASR - OCR (WINDOWS)
 echo ========================================================
 echo.
 
-REM 1. Kiểm tra Python
+REM 1. Kiem tra Python
 python --version >nul 2>&1
-if %errorlevel% neq 0 (
-    echo [LỖI] Không tìm thấy Python trên máy tính. Vui lòng cài Python trước.
+if errorlevel 1 (
+    echo [LOI] Khong tim thay Python tren he thong.
+    echo Vui long cai dat Python va tick chon Add Python to PATH.
+    echo.
     pause
-    exit /b
+    exit /b 1
 )
 
-REM 2. Tạo môi trường ảo nếu chưa có
-if not exist "venv\" (
-    echo [*] Đang tạo môi trường ảo Python (venv)...
+REM 2. Tao moi truong ao neu chua co
+if not exist "venv" (
+    echo [*] Dang tao moi truong ao Python venv...
     python -m venv venv
 )
 
-REM 3. Kích hoạt môi trường ảo và cài thư viện
-echo [*] Đang kích hoạt môi trường ảo và cài đặt thư viện từ requirements.txt...
+REM 3. Kich hoat moi truong ao va cai thu vien
+echo [*] Dang cai dat thu vien tu requirements.txt...
 call venv\Scripts\activate.bat
 python -m pip install --upgrade pip
 pip install -r requirements.txt
 
 echo.
 echo ========================================================
-echo  HOÀN TẤT! Bạn có thể chạy 'run_test_asr.bat' để kiểm thử.
+echo  HOAN TAT! Ban co the chay run_test_asr.bat de kiem thu.
 echo ========================================================
 pause

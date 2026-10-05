@@ -1,0 +1,20 @@
+# ============================================================
+# CÁC THƯ VIỆN CẦN THIẾT CHO DỰ ÁN ASR - OCR (GPU ENABLED)
+# ============================================================
+
+# 1. Nhận diện giọng nói (ASR)
+faster-whisper>=1.0.0
+torch>=2.0.0
+
+# 2. Nhận diện ký tự quang học từ Video (Video Subtitle OCR)
+rapidocr>=3.9.0
+onnxruntime-directml>=1.18.0
+opencv-python>=4.8.0
+Pillow>=9.5.0
+numpy>=1.24.0
+
+# 3. Đo lường phần cứng & Đánh giá NCKH (Benchmark)
+nvidia-ml-py>=12.535.0
+psutil>=5.9.0
+jiwer>=3.0.0
+python-Levenshtein>=0.21.0

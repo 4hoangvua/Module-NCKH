@@ -1,0 +1,21 @@
+# Môi trường ảo Python
+.venv/
+venv/
+ENV/
+env/
+
+# Python Cache
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Thư mục cache của models (Faster-Whisper / HuggingFace)
+.cache/
+models/
+huggingface/
+
+# Thư mục xuất kết quả & dữ liệu test nặng (tùy chọn)
+# output/*
+# !output/.gitkeep
+# data/*
+# !data/.gitkeep

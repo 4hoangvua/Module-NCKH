@@ -31,6 +31,21 @@ if sys.platform == "win32":
 from faster_whisper import WhisperModel
 from profiler import HardwareProfiler
 
+try:
+    from opencc import OpenCC
+    t2s_converter = OpenCC("t2s")
+except Exception:
+    t2s_converter = None
+
+
+def to_simplified_chinese(text: str) -> str:
+    """Chuyển đổi văn bản tiếng Trung Phồn thể sang Giản thể chuẩn."""
+    if not text:
+        return ""
+    if t2s_converter is not None:
+        return t2s_converter.convert(text)
+    return text
+
 
 # ============================================================
 # 1. ĐO LƯỜNG CHẤT LƯỢNG KHOA HỌC (WER / CER BENCHMARK)
@@ -59,10 +74,10 @@ def compute_accuracy_metrics(hypothesis_cues: list, ground_truth_file: str) -> d
         with open(ground_truth_file, "r", encoding="utf-8") as f:
             gt_data = json.load(f)
 
-        ref_text = " ".join([item.get("text", "") for item in gt_data if "text" in item])
-        hyp_text = " ".join([item.get("text", "") for item in hypothesis_cues if "text" in item])
+        ref_text = " ".join([to_simplified_chinese(item.get("text", "")) for item in gt_data if "text" in item])
+        hyp_text = " ".join([to_simplified_chinese(item.get("text", "")) for item in hypothesis_cues if "text" in item])
 
-        normalize = lambda s: re.sub(r"[^\w\s\u4e00-\u9fff]", "", s.lower()).strip()
+        normalize = lambda s: re.sub(r"[^\w\u4e00-\u9fff]", "", to_simplified_chinese(s).lower()).strip()
         ref_norm = normalize(ref_text)
         hyp_norm = normalize(hyp_text)
         ref_words = list(ref_norm) if any('\u4e00' <= c <= '\u9fff' for c in ref_norm) else ref_norm.split()
@@ -122,7 +137,7 @@ def main():
         candidates = ["data/input_video.mp4", "data/input_audio.wav", "data/sample.mp3"]
         media_path = next((c for c in candidates if os.path.exists(c)), "data/input_video.mp4")
 
-    model_size = sys.argv[2] if len(sys.argv) > 2 else "medium"
+    model_size = sys.argv[2] if len(sys.argv) > 2 else "small"
     language_req = sys.argv[3] if len(sys.argv) > 3 else None
 
     # TỰ ĐỘNG CHỌN GPU NVIDIA VÀ KIỂU TÍNH TOÁN TỐI ƯU
@@ -152,7 +167,7 @@ def main():
     print("=" * 65)
     print(f"[*] FILE          : {media_path}")
     print(f"[*] MODEL         : Faster-Whisper {model_size.upper()} ({device.upper()} | {compute_type})")
-    print(f"[*] CHIẾN LƯỢC    : GPU Acceleration + Segment-First (Tự nhiên)")
+    print(f"[*] CHIẾN LƯỢC    : CPU Parallel Threads + VAD Filter + Fast Beam Search")
     print("=" * 65)
 
     if not os.path.exists(media_path):
@@ -166,38 +181,56 @@ def main():
     profiler = HardwareProfiler()
     profiler.start()
 
-    # 1. Tải Model
+    # 1. Tải Model (Tối ưu hóa số luồng CPU vật lý)
     print("\n[1/3] Tải model Faster-Whisper...")
     t0 = time.time()
-    model = WhisperModel(model_size, device=device, compute_type=compute_type)
+    import psutil
+    physical_cores = psutil.cpu_count(logical=False) or 4
+    model = WhisperModel(
+        model_size,
+        device=device,
+        compute_type=compute_type,
+        cpu_threads=physical_cores,
+        num_workers=1,
+    )
     print(f"      Xong ({time.time() - t0:.1f}s)")
 
-    # 2. Nhận dạng âm thanh
+    # 2. Nhận dạng âm thanh (beam_size=2 cho tốc độ tối đa trên CPU)
     print("[2/3] Nhận dạng âm thanh...")
+    initial_prompt = "以下是普通话简体中文内容。" if language_req in [None, "zh", "chinese"] else None
+    beam_size = 5 if device == "cuda" else 2
     segments_iter, info = model.transcribe(
         media_path,
         language=language_req,
-        beam_size=5,
+        beam_size=beam_size,
         word_timestamps=False,
         condition_on_previous_text=False,
+        vad_filter=True,
+        vad_parameters=dict(min_silence_duration_ms=400),
+        initial_prompt=initial_prompt,
     )
 
     lang = info.language
     print(f"      Ngôn ngữ phát hiện: {lang.upper()} ({info.language_probability*100:.1f}%)")
     print(f"      Thời lượng file   : {info.duration:.2f}s")
 
-    # 3. Trích xuất Cues
+    # 3. Trích xuất Cues & Chuyển đổi Giản thể chuẩn
     print("[3/3] Trích xuất danh sách câu...")
     cues = []
     for i, seg in enumerate(segments_iter, start=1):
-        text = seg.text.strip()
-        if not text:
+        raw_text = seg.text.strip()
+        if not raw_text:
+            continue
+        cleaned_text = to_simplified_chinese(raw_text)
+        # Bỏ dấu câu dư thừa ở đầu/cuối
+        cleaned_text = re.sub(r"^[,\.?!;:—\-_ ]+|[,\.?!;:—\-_ ]+$", "", cleaned_text).strip()
+        if not cleaned_text:
             continue
         cues.append({
             "id": i,
             "start": round(seg.start, 2),
             "end": round(seg.end, 2),
-            "text": text,
+            "text": cleaned_text,
             "confidence": round(getattr(seg, "avg_logprob", 0.0), 4),
         })
 

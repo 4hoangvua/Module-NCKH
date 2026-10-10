@@ -18,3 +18,5 @@ nvidia-ml-py>=12.535.0
 psutil>=5.9.0
 jiwer>=3.0.0
 python-Levenshtein>=0.21.0
+opencc-python-reimplemented>=0.1.7
+

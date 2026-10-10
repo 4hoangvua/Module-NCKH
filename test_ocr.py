@@ -25,6 +25,22 @@ import cv2
 import numpy as np
 from profiler import HardwareProfiler
 
+try:
+    from opencc import OpenCC
+    t2s_converter = OpenCC("t2s")
+except Exception:
+    t2s_converter = None
+
+
+def to_simplified_chinese(text: str) -> str:
+    """Chuyển đổi văn bản tiếng Trung Phồn thể sang Giản thể chuẩn."""
+    if not text:
+        return ""
+    if t2s_converter is not None:
+        return t2s_converter.convert(text)
+    return text
+
+
 # Giới hạn số luồng OpenCV để không chiếm dụng 100% CPU
 cv2.setNumThreads(2)
 
@@ -92,10 +108,10 @@ def select_roi_interactive(video_path: str, default_roi: tuple[float, float, flo
 # 2. BỘ TRÍCH XUẤT MẶT NẠ CHỮ (TEXT MASK EXTRACTOR - LEMLYLOI STYLE)
 # ============================================================
 class TextPrescanner:
-    """Quét mẫu video để tự động xác định ngưỡng sáng và phát hiện Watermark/Logo tĩnh."""
+    """Quét mẫu video để tự động xác định ngưỡng sáng và phát hiện Watermark/Logo tĩnh bằng Temporal Persistence Map."""
 
     @staticmethod
-    def prescan(video_path: str, rx: int, ry: int, rw: int, rh: int, sample_count: int = 25) -> dict[str, Any]:
+    def prescan(video_path: str, rx: int, ry: int, rw: int, rh: int, sample_count: int = 40) -> dict[str, Any]:
         cap = cv2.VideoCapture(video_path)
         total_frames = int(cap.get(cv2.CAP_PROP_FRAME_COUNT) or 0)
         if total_frames <= 0:
@@ -122,10 +138,18 @@ class TextPrescanner:
         estimated_thresh = int(np.percentile(all_pixels, 85)) if all_pixels.size > 0 else 180
         estimated_thresh = max(150, min(225, estimated_thresh))
 
-        # Phát hiện watermark đứng yên suốt video
-        binary_masks = [cv2.threshold(f, estimated_thresh, 255, cv2.THRESH_BINARY)[1] for f in samples]
-        accumulated = np.mean(binary_masks, axis=0) if binary_masks else np.zeros_like(samples[0])
-        static_mask = (accumulated >= (0.85 * 255)).astype(np.uint8) * 255
+        # Tính Temporal Persistence Map:
+        # Chỉ những pixel đứng yên liên tục >= 75% số frame mới là Watermark tĩnh
+        binary_masks = [(f >= estimated_thresh).astype(np.float32) for f in samples]
+        persistence_map = np.mean(binary_masks, axis=0) if binary_masks else np.zeros_like(samples[0], dtype=np.float32)
+        static_mask = (persistence_map >= 0.75).astype(np.uint8) * 255
+
+        # Nếu phát hiện watermark tĩnh thực sự (> 20px) thì mới áp dụng
+        if np.count_nonzero(static_mask) > 20:
+            kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (3, 3))
+            static_mask = cv2.dilate(static_mask, kernel, iterations=1)
+        else:
+            static_mask = None
 
         return {"threshold": estimated_thresh, "static_mask": static_mask}
 
@@ -155,7 +179,7 @@ class TextMaskExtractor:
         # Ngưỡng nhị phân
         _, mask = cv2.threshold(gray_crop, self.threshold, 255, cv2.THRESH_BINARY)
 
-        # Trừ watermark tĩnh
+        # Trừ watermark tĩnh (nếu có)
         if self.static_mask is not None and self.static_mask.size > 0:
             resized_static = cv2.resize(self.static_mask, (mask.shape[1], mask.shape[0]), interpolation=cv2.INTER_NEAREST)
             mask = cv2.bitwise_and(mask, cv2.bitwise_not(resized_static))
@@ -174,11 +198,11 @@ class TextMaskExtractor:
             box_w = stats[i, cv2.CC_STAT_WIDTH]
             box_h = stats[i, cv2.CC_STAT_HEIGHT]
 
-            # Bỏ qua hạt nhiễu nhỏ (<12px) hoặc mảng nền lớn (>35% diện tích)
-            if area < 12 or area > (img_area * 0.35):
+            # Bỏ qua hạt nhiễu nhỏ (<8px) hoặc mảng nền lớn (>40% diện tích)
+            if area < 8 or area > (img_area * 0.40):
                 continue
             aspect_ratio = box_w / max(1, box_h)
-            if aspect_ratio > 25 or aspect_ratio < 0.05:
+            if aspect_ratio > 30 or aspect_ratio < 0.03:
                 continue
 
             clean_mask[labels == i] = 255
@@ -202,12 +226,12 @@ def calculate_mask_similarity(m1: np.ndarray, m2: np.ndarray) -> float:
 # 3. BỘ XỬ LÝ TEXT & GỘP CÂU TRÙNG LẶP
 # ============================================================
 def clean_ocr_text(text: str) -> str:
-    """Làm sạch văn bản sau OCR."""
+    """Làm sạch văn bản sau OCR và chuẩn hóa sang Giản thể."""
     if not text:
         return ""
+    text = to_simplified_chinese(text)
     text = re.sub(r"\s+", " ", text).strip()
-    text = re.sub(r"^[,\.?!;:—\-_ ]+", "", text)
-    text = re.sub(r"[,、]+$", "", text)
+    text = re.sub(r"^[,\.?!;:—\-_ ]+|[,\.?!;:—\-_ ]+$", "", text)
     return text.strip()
 
 
@@ -220,8 +244,11 @@ def text_similarity(s1: str, s2: str) -> float:
     return SequenceMatcher(None, s1_norm, s2_norm).ratio()
 
 
-def merge_consecutive_duplicate_cues(cues: list[dict], max_gap_sec: float = 0.65) -> list[dict]:
-    """Hậu xử lý thông minh: Gộp các câu phụ đề liên tiếp bị trùng lặp."""
+def merge_consecutive_duplicate_cues(cues: list[dict], max_gap_sec: float = 0.8) -> list[dict]:
+    """Hậu xử lý thông minh: 
+    - Gộp các câu phụ đề liên tiếp bị trùng lặp.
+    - Tự động nối các câu bị tách vụn do hiệu ứng chữ chạy dần (Prefix / Cumulative Subtitles).
+    """
     if not cues:
         return []
 
@@ -230,12 +257,23 @@ def merge_consecutive_duplicate_cues(cues: list[dict], max_gap_sec: float = 0.65
 
     for nxt in cues[1:]:
         gap = nxt["start"] - curr["end"]
+        t1_norm = re.sub(r"[^\w\u4e00-\u9fff]", "", curr["text"].lower())
+        t2_norm = re.sub(r"[^\w\u4e00-\u9fff]", "", nxt["text"].lower())
         sim = text_similarity(curr["text"], nxt["text"])
 
-        # Nếu cùng nội dung (hoặc tương đồng >= 80%) và cách nhau dưới 0.65s -> Gộp làm 1
+        # 1. Trùng lặp nội dung (sim >= 0.80) trong khoảng thời gian gần
         if sim >= 0.80 and gap <= max_gap_sec:
-            curr["end"] = nxt["end"]
+            curr["end"] = max(curr["end"], nxt["end"])
             curr["confidence"] = max(curr["confidence"], nxt["confidence"])
+            if len(nxt["text"]) > len(curr["text"]):
+                curr["text"] = nxt["text"]
+
+        # 2. Hiệu ứng chữ chạy dần (Karaoke / Cumulative Subtitle):
+        elif gap <= 0.5 and t2_norm.startswith(t1_norm) and len(t1_norm) >= 2:
+            curr["end"] = max(curr["end"], nxt["end"])
+            curr["text"] = nxt["text"]
+            curr["confidence"] = max(curr["confidence"], nxt["confidence"])
+
         else:
             merged.append(curr)
             curr = dict(nxt)
@@ -252,25 +290,97 @@ def merge_consecutive_duplicate_cues(cues: list[dict], max_gap_sec: float = 0.65
 # 4. EVENT-DRIVEN VIDEO OCR PIPELINE (LEMYLOI ARCHITECTURE)
 # ============================================================
 class VideoOCRPipeline:
-    def __init__(self, lang: str = "zh", scan_fps: float = 3.5):
+    def __init__(self, lang: str = "zh", scan_fps: float = 3.0):
         self.scan_fps = scan_fps
         self.lang = lang
-        print("[*] Đang khởi tạo mô hình RapidOCR (PP-OCRv6 ONNX DirectML)...")
+        print("[*] Đang khởi tạo mô hình RapidOCR (PP-OCRv6 ONNX)...")
         from rapidocr import RapidOCR
-        self.engine = RapidOCR()
-        print("[✓] Khởi tạo OCR thành công.")
+        import psutil
+        physical_cores = psutil.cpu_count(logical=False) or 4
+
+        # Tối ưu hóa ONNX Runtime cho CPU:
+        # - Tắt bộ phân loại hướng chữ (Cls) vì phụ đề video luôn nằm ngang
+        # - Đặt số luồng ONNX = số nhân vật lý để tránh tranh chấp cache
+        self.engine = RapidOCR(params={
+            "Global.use_cls": False,                                    # Tắt Classification (tiết kiệm ~30%)
+            "Global.min_height": 20,                                    # Cho phép nhận diện chữ nhỏ hơn
+            "Global.max_side_len": 960,                                 # Giới hạn kích thước đầu vào
+            "EngineConfig.onnxruntime.intra_op_num_threads": physical_cores,
+            "EngineConfig.onnxruntime.inter_op_num_threads": 1,
+        })
+        print(f"[✓] Khởi tạo OCR thành công (ONNX Threads={physical_cores}, Cls=OFF).")
 
     def run_ocr_on_crop(self, image_crop: np.ndarray) -> tuple[str, float]:
-        """Chạy OCR lên một ảnh crop."""
+        """Chạy OCR lên một ảnh crop và tự động lọc Bounding Box theo phân bố không gian & kích thước."""
         try:
             result = self.engine(image_crop)
-            if not result or not result.txts:
+            if result is None or result.txts is None or len(result.txts) == 0:
                 return "", 0.0
 
-            lines = [str(t).strip() for t in result.txts if str(t).strip()]
-            scores = [float(s) for s in (result.scores or [])]
-            avg_score = sum(scores) / len(scores) if scores else 0.90
-            full_text = clean_ocr_text(" ".join(lines))
+            crop_h, crop_w = image_crop.shape[:2]
+            boxes = result.boxes
+            txts = result.txts
+            scores = result.scores if result.scores is not None else [0.90] * len(txts)
+
+            # Nếu không có boxes hoặc chỉ có 1 box duy nhất -> Trả về luôn
+            if boxes is None or len(boxes) <= 1:
+                lines = [str(t).strip() for t in txts if str(t).strip()]
+                avg_score = float(scores[0]) if len(scores) > 0 else 0.90
+                return clean_ocr_text(" ".join(lines)), round(avg_score, 4)
+
+            # Phân tích đặc trưng kích thước & vị trí hình học của từng box khi có >= 2 boxes
+            box_metrics = []
+            for box, txt, sc in zip(boxes, txts, scores):
+                t_str = str(txt).strip()
+                if not t_str:
+                    continue
+                pts = np.array(box, dtype=np.float32)
+                min_x = float(np.min(pts[:, 0]))
+                max_x = float(np.max(pts[:, 0]))
+                min_y = float(np.min(pts[:, 1]))
+                max_y = float(np.max(pts[:, 1]))
+                bw = max(1.0, max_x - min_x)
+                bh = max(1.0, max_y - min_y)
+                cx = (min_x + max_x) / 2.0
+                cy = (min_y + max_y) / 2.0
+                box_metrics.append({
+                    "box": box, "text": t_str, "score": float(sc),
+                    "bw": bw, "bh": bh, "cx": cx, "cy": cy,
+                    "min_x": min_x, "max_x": max_x,
+                    "area": bw * bh
+                })
+
+            if not box_metrics:
+                return "", 0.0
+
+            # Lấy box có diện tích lớn nhất làm mốc tham chiếu
+            max_area = max(m["area"] for m in box_metrics)
+            max_h = max(m["bh"] for m in box_metrics)
+
+            valid_items = []
+            for m in box_metrics:
+                # 1. Box rác ở rìa: Nằm dạt hẳn sang rìa trái (< 15% width) hoặc rìa phải (> 85% width)
+                # VÀ có diện tích/kích thước quá nhỏ so với box chính (< 25% max_area)
+                is_edge_debris = (m["cx"] > 0.85 * crop_w or m["cx"] < 0.15 * crop_w) and (m["area"] < 0.25 * max_area)
+
+                # 2. Box rác siêu nhỏ (< 35% chiều cao chữ chính)
+                is_too_small = (m["bh"] < 0.35 * max_h) and (m["area"] < 0.20 * max_area)
+
+                if not is_edge_debris and not is_too_small:
+                    valid_items.append(m)
+
+            # Fallback nếu lọc hết: lấy lại box có diện tích lớn nhất
+            if not valid_items:
+                valid_items = [max(box_metrics, key=lambda x: x["area"])]
+
+            # Sắp xếp các box còn lại từ trái sang phải theo min_x
+            valid_items.sort(key=lambda x: x["min_x"])
+
+            final_texts = [m["text"] for m in valid_items]
+            final_scores = [m["score"] for m in valid_items]
+
+            avg_score = sum(final_scores) / len(final_scores)
+            full_text = clean_ocr_text(" ".join(final_texts))
             return full_text, round(avg_score, 4)
         except Exception:
             return "", 0.0
@@ -372,7 +482,7 @@ class VideoOCRPipeline:
                     best_crop = max(event_frames, key=lambda x: x[0])[2]
                     text, conf = self.run_ocr_on_crop(best_crop)
 
-                    if text and len(text) >= 2:
+                    if text and len(text) >= 1:
                         cue_item = {
                             "id": cue_idx,
                             "start": round(event_start_time, 2),
@@ -406,7 +516,7 @@ class VideoOCRPipeline:
             if event_end_time - event_start_time >= 0.35:
                 best_crop = max(event_frames, key=lambda x: x[0])[2]
                 text, conf = self.run_ocr_on_crop(best_crop)
-                if text and len(text) >= 2:
+                if text and len(text) >= 1:
                     cue_item = {
                         "id": cue_idx,
                         "start": round(event_start_time, 2),
@@ -460,10 +570,10 @@ def compute_ocr_accuracy(hypothesis_cues: list, ground_truth_file: str) -> dict 
         with open(ground_truth_file, "r", encoding="utf-8") as f:
             gt_data = json.load(f)
 
-        ref_text = " ".join([item.get("text", "") for item in gt_data if "text" in item])
-        hyp_text = " ".join([item.get("text", "") for item in hypothesis_cues if "text" in item])
+        ref_text = " ".join([to_simplified_chinese(item.get("text", "")) for item in gt_data if "text" in item])
+        hyp_text = " ".join([to_simplified_chinese(item.get("text", "")) for item in hypothesis_cues if "text" in item])
 
-        normalize = lambda s: re.sub(r"[^\w\u4e00-\u9fff]", "", s.lower()).strip()
+        normalize = lambda s: re.sub(r"[^\w\u4e00-\u9fff]", "", to_simplified_chinese(s).lower()).strip()
         ref_norm = normalize(ref_text)
         hyp_norm = normalize(hyp_text)
         ref_words = list(ref_norm) if any('\u4e00' <= c <= '\u9fff' for c in ref_norm) else ref_norm.split()

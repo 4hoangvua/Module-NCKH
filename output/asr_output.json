@@ -3,538 +3,720 @@
     {
       "id": 1,
       "start": 0.0,
-      "end": 2.88,
-      "text": "不说话还能圈粉全场,鬼面的第一反差萌",
-      "confidence": -0.117
+      "end": 2.8,
+      "text": "诶 你长这么别子 你是个什么东西啊",
+      "confidence": -0.2689
     },
     {
       "id": 2,
-      "start": 2.88,
-      "end": 5.6,
-      "text": "迷豆子用行动告诉你,什么才叫萌的翻观众",
-      "confidence": -0.117
+      "start": 2.8,
+      "end": 4.4,
+      "text": "啊 不明显吗",
+      "confidence": -0.2689
     },
     {
       "id": 3,
-      "start": 5.6,
-      "end": 6.52,
-      "text": "打得过流氓",
-      "confidence": -0.117
+      "start": 4.4,
+      "end": 5.4,
+      "text": "啊",
+      "confidence": -0.2689
     },
     {
       "id": 4,
-      "start": 6.52,
-      "end": 9.28,
-      "text": "迷豆子整日咬着主筒,根本不能开口说话",
-      "confidence": -0.117
+      "start": 5.4,
+      "end": 10.58,
+      "text": "哦 原来你是个鸡精啊 怪不得闻起来这么歇",
+      "confidence": -0.2689
     },
     {
       "id": 5,
-      "start": 9.28,
-      "end": 12.08,
-      "text": "仅凭几句简单的发声,跟一脸无辜的表情",
-      "confidence": -0.117
+      "start": 10.58,
+      "end": 11.58,
+      "text": "啊",
+      "confidence": -0.2689
     },
     {
       "id": 6,
-      "start": 12.08,
-      "end": 13.64,
-      "text": "就融化了所有观众的心",
-      "confidence": -0.117
+      "start": 11.58,
+      "end": 14.58,
+      "text": "我很好奇 你为什么要选择做鸡呢",
+      "confidence": -0.2689
     },
     {
       "id": 7,
-      "start": 13.64,
-      "end": 15.96,
-      "text": "如果非要给迷豆子的可爱名场面排名",
-      "confidence": -0.117
+      "start": 14.58,
+      "end": 16.62,
+      "text": "你就没考虑过做其他动物吗",
+      "confidence": -0.2689
     },
     {
       "id": 8,
-      "start": 15.96,
-      "end": 18.32,
-      "text": "那和香奈乎的首次交锋毕竟前三",
-      "confidence": -0.117
+      "start": 16.62,
+      "end": 18.62,
+      "text": "那你为什么要做鸭",
+      "confidence": -0.2689
     },
     {
       "id": 9,
-      "start": 18.32,
-      "end": 20.56,
-      "text": "香奈乎每日的察觉到迷豆子的身份",
-      "confidence": -0.117
+      "start": 18.62,
+      "end": 21.18,
+      "text": "这不生下来就注定了吗",
+      "confidence": -0.2689
     },
     {
       "id": 10,
-      "start": 20.56,
-      "end": 23.32,
-      "text": "二话不说拔刀就砍,眼看迷豆子就要受伤",
-      "confidence": -0.117
+      "start": 21.18,
+      "end": 22.68,
+      "text": "你说的我好像能选",
+      "confidence": -0.2689
     },
     {
       "id": 11,
-      "start": 23.32,
-      "end": 25.6,
-      "text": "只见他不躲不闪,身体骤然变小",
-      "confidence": -0.117
+      "start": 22.68,
+      "end": 23.68,
+      "text": "是的",
+      "confidence": -0.2689
     },
     {
       "id": 12,
-      "start": 25.6,
-      "end": 27.04,
-      "text": "蹦带着朝远处逃走",
-      "confidence": -0.1137
+      "start": 23.68,
+      "end": 24.68,
+      "text": "啊 不能选吗",
+      "confidence": -0.2689
     },
     {
       "id": 13,
-      "start": 27.04,
-      "end": 28.44,
-      "text": "香奈乎看了一脸懵逼",
-      "confidence": -0.1137
+      "start": 24.68,
+      "end": 28.18,
+      "text": "哦 那假如有的选 那你会当什么啊",
+      "confidence": -0.2689
     },
     {
       "id": 14,
-      "start": 28.44,
-      "end": 30.6,
-      "text": "完全没想到鬼戒还有这么可爱的存在",
-      "confidence": -0.1137
+      "start": 28.18,
+      "end": 29.18,
+      "text": "我会去当个妈布",
+      "confidence": -0.2689
     },
     {
       "id": 15,
-      "start": 30.6,
-      "end": 31.68,
-      "text": "不过她并没手软",
-      "confidence": -0.1137
+      "start": 29.18,
+      "end": 30.68,
+      "text": "哦 为什么",
+      "confidence": -0.2689
     },
     {
       "id": 16,
-      "start": 31.68,
-      "end": 33.12,
-      "text": "随后连续又是几刀",
-      "confidence": -0.1137
+      "start": 30.68,
+      "end": 32.28,
+      "text": "为了把你这张臭嘴塞起来",
+      "confidence": -0.2494
     },
     {
       "id": 17,
-      "start": 33.12,
-      "end": 34.72,
-      "text": "迷豆子愣是听声辨慰",
-      "confidence": -0.1137
+      "start": 32.28,
+      "end": 33.0,
+      "text": "绑住",
+      "confidence": -0.2494
     },
     {
       "id": 18,
-      "start": 34.72,
-      "end": 36.2,
-      "text": "头也不回就化解了危机",
-      "confidence": -0.1137
+      "start": 33.0,
+      "end": 34.52,
+      "text": "然后再铲上两百圈",
+      "confidence": -0.2494
     },
     {
       "id": 19,
-      "start": 36.2,
-      "end": 37.68,
-      "text": "后来迷豆子遇上蜜璃",
-      "confidence": -0.1137
+      "start": 34.52,
+      "end": 35.48,
+      "text": "这样",
+      "confidence": -0.2494
     },
     {
       "id": 20,
-      "start": 37.68,
-      "end": 38.92,
-      "text": "那才叫一见如故",
-      "confidence": -0.1137
+      "start": 35.48,
+      "end": 39.7,
+      "text": "这个世界就清静了",
+      "confidence": -0.2494
     },
     {
       "id": 21,
-      "start": 38.92,
-      "end": 40.88,
-      "text": "也许小孩子都喜欢漂亮姐姐",
-      "confidence": -0.1137
+      "start": 39.7,
+      "end": 40.66,
+      "text": "你真调皮",
+      "confidence": -0.2494
     },
     {
       "id": 22,
-      "start": 40.88,
-      "end": 42.48,
-      "text": "而且蜜璃那是真惯着她",
-      "confidence": -0.1137
+      "start": 40.66,
+      "end": 41.34,
+      "text": "嘿嘿嘿",
+      "confidence": -0.2494
     },
     {
       "id": 23,
-      "start": 42.48,
-      "end": 43.96,
-      "text": "吃饭睡觉都不分开",
-      "confidence": -0.1137
+      "start": 41.34,
+      "end": 42.74,
+      "text": "哈",
+      "confidence": -0.2494
     },
     {
       "id": 24,
-      "start": 43.96,
-      "end": 44.76,
-      "text": "时间长了",
-      "confidence": -0.1137
+      "start": 42.74,
+      "end": 43.7,
+      "text": "哎 小基金",
+      "confidence": -0.2494
     },
     {
       "id": 25,
-      "start": 44.76,
-      "end": 45.88,
-      "text": "迷豆子一举一动",
-      "confidence": -0.1137
+      "start": 43.7,
+      "end": 46.06,
+      "text": "你平时有什么爱好没有啊",
+      "confidence": -0.2494
     },
     {
       "id": 26,
-      "start": 45.88,
-      "end": 47.12,
-      "text": "都跟蜜璃一模一样",
-      "confidence": -0.1137
+      "start": 46.06,
+      "end": 47.58,
+      "text": "平时就唱着歌 画个画",
+      "confidence": -0.2494
     },
     {
       "id": 27,
-      "start": 47.12,
-      "end": 49.6,
-      "text": "甚至还让哥哥帮她也梳了蜜璃同款发型",
-      "confidence": -0.1137
+      "start": 47.58,
+      "end": 48.74,
+      "text": "跳个舞什么的",
+      "confidence": -0.2494
     },
     {
       "id": 28,
-      "start": 49.6,
-      "end": 50.96,
-      "text": "后来上了无限列车",
-      "confidence": -0.103
+      "start": 48.74,
+      "end": 50.18,
+      "text": "那你平时打篮球吗",
+      "confidence": -0.2494
     },
     {
       "id": 29,
-      "start": 50.96,
-      "end": 52.24,
-      "text": "炭治郎昏睡不醒",
-      "confidence": -0.103
+      "start": 50.18,
+      "end": 50.82,
+      "text": "啊",
+      "confidence": -0.2494
     },
     {
       "id": 30,
-      "start": 52.24,
-      "end": 53.76,
-      "text": "迷豆子用头暴力撞击",
-      "confidence": -0.103
+      "start": 50.82,
+      "end": 52.18,
+      "text": "打篮球",
+      "confidence": -0.2494
     },
     {
       "id": 31,
-      "start": 53.76,
-      "end": 55.4,
-      "text": "没想到哥哥的头比他还硬",
-      "confidence": -0.103
+      "start": 52.18,
+      "end": 53.9,
+      "text": "打什么篮球 打什么篮球",
+      "confidence": -0.2494
     },
     {
       "id": 32,
-      "start": 55.4,
-      "end": 56.56,
-      "text": "直接额头出血",
-      "confidence": -0.103
+      "start": 53.9,
+      "end": 54.78,
+      "text": "你告诉我",
+      "confidence": -0.2494
     },
     {
       "id": 33,
-      "start": 56.56,
-      "end": 58.16,
-      "text": "即便有瞬间恢复的能力",
-      "confidence": -0.103
+      "start": 54.78,
+      "end": 55.94,
+      "text": "鸡怎么打篮球",
+      "confidence": -0.2494
     },
     {
       "id": 34,
-      "start": 58.16,
-      "end": 59.72,
-      "text": "迷豆子依然是痛得流泪",
-      "confidence": -0.103
+      "start": 55.94,
+      "end": 57.7,
+      "text": "你不要那么激动啊 小基金",
+      "confidence": -0.2494
     },
     {
       "id": 35,
-      "start": 59.72,
-      "end": 60.88,
-      "text": "后来炭治郎醒了",
-      "confidence": -0.103
+      "start": 57.7,
+      "end": 60.4,
+      "text": "不是我问的 是网友问的啦",
+      "confidence": -0.2494
     },
     {
       "id": 36,
-      "start": 60.88,
-      "end": 62.16,
-      "text": "想靠近看看情况",
-      "confidence": -0.103
+      "start": 60.4,
+      "end": 61.96,
+      "text": "不要一直激进激进的叫",
+      "confidence": -0.2494
     },
     {
       "id": 37,
-      "start": 62.16,
-      "end": 64.0,
-      "text": "吓得迷豆子赶紧双手抱头",
-      "confidence": -0.103
+      "start": 61.96,
+      "end": 63.4,
+      "text": "听着就烦人了",
+      "confidence": -0.2494
     },
     {
       "id": 38,
-      "start": 64.0,
-      "end": 65.32,
-      "text": "生怕再次受伤",
-      "confidence": -0.103
+      "start": 63.4,
+      "end": 64.4,
+      "text": "我又不是调料",
+      "confidence": -0.3729
     },
     {
       "id": 39,
-      "start": 65.32,
-      "end": 66.88,
-      "text": "由于他呆萌可爱的造型",
-      "confidence": -0.103
+      "start": 64.92,
+      "end": 66.32,
+      "text": "那就叫你鸡腰",
+      "confidence": -0.3729
     },
     {
       "id": 40,
-      "start": 66.88,
-      "end": 68.48,
-      "text": "让人低估了他的战斗能力",
-      "confidence": -0.103
+      "start": 66.32,
+      "end": 67.24,
+      "text": "不叫鸡腰",
+      "confidence": -0.3729
     },
     {
       "id": 41,
-      "start": 68.48,
-      "end": 69.8,
-      "text": "再由过炭治郎重伤",
-      "confidence": -0.103
+      "start": 67.24,
+      "end": 68.32,
+      "text": "难听死的",
+      "confidence": -0.3729
     },
     {
       "id": 42,
-      "start": 69.8,
-      "end": 71.64,
-      "text": "迷豆子被激发出二段进化",
-      "confidence": -0.103
+      "start": 68.84,
+      "end": 70.44,
+      "text": "那就叫腰鸡",
+      "confidence": -0.3729
     },
     {
       "id": 43,
-      "start": 71.64,
-      "end": 73.24,
-      "text": "即便是位列上前的舵鸡",
-      "confidence": -0.103
+      "start": 71.16,
+      "end": 72.12,
+      "text": "要什么鸡啊",
+      "confidence": -0.3729
     },
     {
       "id": 44,
-      "start": 73.24,
-      "end": 74.92,
-      "text": "在他手下也只有挨孽的粪",
-      "confidence": -0.103
+      "start": 72.12,
+      "end": 73.08,
+      "text": "你不打麻将呢",
+      "confidence": -0.3729
     },
     {
       "id": 45,
-      "start": 74.92,
-      "end": 78.0,
-      "text": "被迷豆子42号大叫 活生生贯穿了身体",
-      "confidence": -0.117
+      "start": 73.28,
+      "end": 73.96,
+      "text": "软脚",
+      "confidence": -0.3729
     },
     {
       "id": 46,
-      "start": 78.0,
-      "end": 80.76,
-      "text": "迷豆子的血鬼术还具有非凡的治愈能力",
-      "confidence": -0.117
+      "start": 73.96,
+      "end": 74.8,
+      "text": "我有名字的",
+      "confidence": -0.3729
     },
     {
       "id": 47,
-      "start": 80.76,
-      "end": 82.48,
-      "text": "都知道姬夫太郎用的是梅毒",
-      "confidence": -0.117
+      "start": 74.8,
+      "end": 75.28,
+      "text": "哦",
+      "confidence": -0.3729
     },
     {
       "id": 48,
-      "start": 82.48,
-      "end": 84.2,
-      "text": "一般方法根本不可能根治",
-      "confidence": -0.117
+      "start": 75.28,
+      "end": 76.4,
+      "text": "那你叫什么名字啊",
+      "confidence": -0.3729
     },
     {
       "id": 49,
-      "start": 84.2,
-      "end": 86.36,
-      "text": "可毒素禁不住迷豆子鬼火焚烧",
-      "confidence": -0.117
+      "start": 76.4,
+      "end": 76.88,
+      "text": "我叫",
+      "confidence": -0.3729
     },
     {
       "id": 50,
-      "start": 86.36,
-      "end": 88.32,
-      "text": "这一幕吓坏了阴柱的三位妻子",
-      "confidence": -0.117
+      "start": 76.88,
+      "end": 77.08,
+      "text": "欸",
+      "confidence": -0.3729
     },
     {
       "id": 51,
-      "start": 88.32,
-      "end": 89.28,
-      "text": "他们一直认为",
-      "confidence": -0.117
+      "start": 77.08,
+      "end": 77.68,
+      "text": "我知道了",
+      "confidence": -0.3729
     },
     {
       "id": 52,
-      "start": 89.28,
-      "end": 91.48,
-      "text": "是迷豆子要提前火化重伤的丈夫",
-      "confidence": -0.117
+      "start": 77.68,
+      "end": 78.48,
+      "text": "这写的呢",
+      "confidence": -0.3729
     },
     {
       "id": 53,
-      "start": 94.48,
-      "end": 95.88,
-      "text": "刚变身厉鬼的迷豆子",
-      "confidence": -0.117
+      "start": 78.48,
+      "end": 78.84,
+      "text": "嗯",
+      "confidence": -0.3729
     },
     {
       "id": 54,
-      "start": 95.88,
-      "end": 97.32,
-      "text": "人类意识逐渐消失",
-      "confidence": -0.117
+      "start": 78.84,
+      "end": 79.88,
+      "text": "你叫",
+      "confidence": -0.3729
     },
     {
       "id": 55,
-      "start": 97.32,
-      "end": 99.16,
-      "text": "幸亏贪治郎从小哄她睡觉",
-      "confidence": -0.117
+      "start": 79.88,
+      "end": 81.08,
+      "text": "狂犬",
+      "confidence": -0.3729
     },
     {
       "id": 56,
-      "start": 99.16,
-      "end": 100.72,
-      "text": "知道妹妹最爱听的歌曲",
-      "confidence": -0.117
+      "start": 81.08,
+      "end": 81.52,
+      "text": "蛤",
+      "confidence": -0.3729
     },
     {
       "id": 57,
-      "start": 100.72,
-      "end": 102.24,
-      "text": "用儿歌唤起了她的记忆",
-      "confidence": -0.117
+      "start": 82.4,
+      "end": 83.64,
+      "text": "你从没有才叫狂犬",
+      "confidence": -0.3729
     },
     {
       "id": 58,
-      "start": 102.24,
-      "end": 103.88,
-      "text": "迷豆子想起了自己的母亲",
-      "confidence": -0.117
+      "start": 83.64,
+      "end": 84.92,
+      "text": "你全家都叫狂犬",
+      "confidence": -0.3729
     },
     {
       "id": 59,
-      "start": 103.88,
-      "end": 105.96,
-      "text": "同时他瞪着一双大眼的可爱造型",
-      "confidence": -0.0973
+      "start": 84.92,
+      "end": 86.48,
+      "text": "那你就上面就这么写的呀",
+      "confidence": -0.3729
     },
     {
       "id": 60,
-      "start": 105.96,
-      "end": 107.8,
-      "text": "也成了无数观众的梦中情娃",
-      "confidence": -0.0973
+      "start": 86.48,
+      "end": 87.16,
+      "text": "狂犬",
+      "confidence": -0.3729
     },
     {
       "id": 61,
-      "start": 107.8,
-      "end": 109.12,
-      "text": "咪豆子恢复了人性",
-      "confidence": -0.0973
+      "start": 87.16,
+      "end": 88.04,
+      "text": "还这么多犬",
+      "confidence": -0.3729
     },
     {
       "id": 62,
-      "start": 109.12,
-      "end": 110.68,
-      "text": "身体也缩成了迷你版本",
-      "confidence": -0.0973
+      "start": 88.04,
+      "end": 88.48,
+      "text": "你",
+      "confidence": -0.3729
     },
     {
       "id": 63,
-      "start": 110.68,
-      "end": 111.64,
-      "text": "他全程一团",
-      "confidence": -0.0973
+      "start": 88.48,
+      "end": 90.28,
+      "text": "你可记得别忘了打狂犬针哦",
+      "confidence": -0.3729
     },
     {
       "id": 64,
-      "start": 111.64,
-      "end": 113.24,
-      "text": "在哥哥脚下沉沉睡去",
-      "confidence": -0.0973
+      "start": 90.28,
+      "end": 91.8,
+      "text": "什么狂犬针啊",
+      "confidence": -0.3729
     },
     {
       "id": 65,
-      "start": 113.24,
-      "end": 114.72,
-      "text": "随着战斗经验的增加",
-      "confidence": -0.0973
+      "start": 91.8,
+      "end": 93.48,
+      "text": "没事就多读点书行不行",
+      "confidence": -0.3729
     },
     {
       "id": 66,
-      "start": 114.72,
-      "end": 116.64,
-      "text": "咪豆子已经能够控制鬼话程度",
-      "confidence": -0.0973
+      "start": 93.48,
+      "end": 95.72,
+      "text": "对啊 这么简单的字你都不认识啊",
+      "confidence": -0.2502
     },
     {
       "id": 67,
-      "start": 116.64,
-      "end": 117.92,
-      "text": "就比如在断刀村",
-      "confidence": -0.0973
+      "start": 95.72,
+      "end": 97.0,
+      "text": "你是不是傻",
+      "confidence": -0.2502
     },
     {
       "id": 68,
-      "start": 117.92,
-      "end": 119.56,
-      "text": "听到炭治郎叫自己名字",
-      "confidence": -0.0973
+      "start": 97.0,
+      "end": 98.28,
+      "text": "来 我教你",
+      "confidence": -0.2502
     },
     {
       "id": 69,
-      "start": 119.56,
-      "end": 121.32,
-      "text": "仍然呆萌的举手给出反应",
-      "confidence": -0.0973
+      "start": 98.28,
+      "end": 99.04,
+      "text": "啊",
+      "confidence": -0.2502
     },
     {
       "id": 70,
-      "start": 121.32,
-      "end": 122.88,
-      "text": "咪豆子平时被哥哥保护",
-      "confidence": -0.0973
+      "start": 99.04,
+      "end": 100.84,
+      "text": "狂 风",
+      "confidence": -0.2502
     },
     {
       "id": 71,
-      "start": 122.88,
-      "end": 124.68,
-      "text": "危险时反过来就踏于水火",
-      "confidence": -0.0973
+      "start": 100.84,
+      "end": 102.12,
+      "text": "啊",
+      "confidence": -0.2502
     },
     {
       "id": 72,
-      "start": 124.68,
-      "end": 125.68,
-      "text": "不管多么危险",
-      "confidence": -0.0973
+      "start": 102.12,
+      "end": 103.08,
+      "text": "你才是傻",
+      "confidence": -0.2502
     },
     {
       "id": 73,
-      "start": 125.68,
-      "end": 127.64,
-      "text": "兄妹二人从没想过放弃对方",
-      "confidence": -0.0973
+      "start": 103.08,
+      "end": 104.2,
+      "text": "风字我认识",
+      "confidence": -0.2502
     },
     {
       "id": 74,
-      "start": 127.64,
-      "end": 129.08,
-      "text": "这样又萌又撒的妹妹",
-      "confidence": -0.0973
+      "start": 104.2,
+      "end": 105.2,
+      "text": "旁边那个才是风",
+      "confidence": -0.2502
     },
     {
       "id": 75,
-      "start": 129.08,
-      "end": 130.48,
-      "text": "谁不想拥有一个呢",
-      "confidence": -0.2529
+      "start": 105.2,
+      "end": 106.6,
+      "text": "我们乡下人生的汉",
+      "confidence": -0.2502
+    },
+    {
+      "id": 76,
+      "start": 106.6,
+      "end": 108.04,
+      "text": "认字只认半边",
+      "confidence": -0.2502
+    },
+    {
+      "id": 77,
+      "start": 108.04,
+      "end": 108.8,
+      "text": "有问题吗",
+      "confidence": -0.2502
+    },
+    {
+      "id": 78,
+      "start": 108.8,
+      "end": 109.76,
+      "text": "啊",
+      "confidence": -0.2502
+    },
+    {
+      "id": 79,
+      "start": 109.76,
+      "end": 111.68,
+      "text": "那它旁边这三个拳怎么解释啊",
+      "confidence": -0.2502
+    },
+    {
+      "id": 80,
+      "start": 111.68,
+      "end": 112.56,
+      "text": "呃",
+      "confidence": -0.2502
+    },
+    {
+      "id": 81,
+      "start": 112.56,
+      "end": 114.92,
+      "text": "这三条狗是被这个风吹过来的",
+      "confidence": -0.2502
+    },
+    {
+      "id": 82,
+      "start": 114.92,
+      "end": 115.52,
+      "text": "啊",
+      "confidence": -0.2502
+    },
+    {
+      "id": 83,
+      "start": 115.52,
+      "end": 118.57,
+      "text": "你这刮的是狗风吧",
+      "confidence": -0.2502
+    },
+    {
+      "id": 84,
+      "start": 118.57,
+      "end": 119.41,
+      "text": "拳有三个",
+      "confidence": -0.2502
+    },
+    {
+      "id": 85,
+      "start": 119.41,
+      "end": 120.37,
+      "text": "按比例来说",
+      "confidence": -0.2502
+    },
+    {
+      "id": 86,
+      "start": 120.37,
+      "end": 121.45,
+      "text": "那也应该念拳啊",
+      "confidence": -0.2502
+    },
+    {
+      "id": 87,
+      "start": 121.45,
+      "end": 122.25,
+      "text": "念风",
+      "confidence": -0.2502
+    },
+    {
+      "id": 88,
+      "start": 122.25,
+      "end": 122.93,
+      "text": "念拳",
+      "confidence": -0.2502
+    },
+    {
+      "id": 89,
+      "start": 122.93,
+      "end": 123.69,
+      "text": "念风",
+      "confidence": -0.2502
+    },
+    {
+      "id": 90,
+      "start": 123.69,
+      "end": 126.25,
+      "text": "念拳就狂风鸡狂拳鸡",
+      "confidence": -0.2502
+    },
+    {
+      "id": 91,
+      "start": 126.25,
+      "end": 127.93,
+      "text": "狂风鸡狂拳鸡",
+      "confidence": -0.2502
+    },
+    {
+      "id": 92,
+      "start": 127.93,
+      "end": 128.97,
+      "text": "你们够了哈",
+      "confidence": -0.2502
+    },
+    {
+      "id": 93,
+      "start": 128.97,
+      "end": 130.29,
+      "text": "什么乱七八糟的",
+      "confidence": -0.2502
+    },
+    {
+      "id": 94,
+      "start": 130.29,
+      "end": 131.29,
+      "text": "你才狂风鸡",
+      "confidence": -0.2502
+    },
+    {
+      "id": 95,
+      "start": 131.29,
+      "end": 132.33,
+      "text": "你才狂拳鸡",
+      "confidence": -0.2502
+    },
+    {
+      "id": 96,
+      "start": 132.33,
+      "end": 133.01,
+      "text": "听好了",
+      "confidence": -0.2502
+    },
+    {
+      "id": 97,
+      "start": 133.01,
+      "end": 134.49,
+      "text": "我叫狂标鸡",
+      "confidence": -0.2502
+    },
+    {
+      "id": 98,
+      "start": 134.49,
+      "end": 136.45,
+      "text": "不什么狂风鸡狂拳鸡",
+      "confidence": -0.2502
+    },
+    {
+      "id": 99,
+      "start": 136.45,
+      "end": 137.97,
+      "text": "没文化就回去多念点说",
+      "confidence": -0.2502
+    },
+    {
+      "id": 100,
+      "start": 137.97,
+      "end": 139.89,
+      "text": "实在不行就回去多养点猪",
+      "confidence": -0.2502
+    },
+    {
+      "id": 101,
+      "start": 139.89,
+      "end": 141.49,
+      "text": "你是烦球的狗",
+      "confidence": -0.2502
     }
   ],
   "hardware_benchmark": {
-    "elapsed_sec": 42.116,
-    "peak_ram_mb": 1873.32,
-    "ram_delta_mb": 1643.62,
-    "avg_cpu_percent": 242.6,
-    "cpu_cores": 12,
-    "has_gpu": true,
-    "gpu_name": "NVIDIA GeForce GTX 1060 6GB",
-    "peak_vram_mb": 1576.98,
-    "peak_vram_gb": 1.54
+    "elapsed_sec": 35.83,
+    "peak_ram_mb": 630.18,
+    "ram_delta_mb": 576.8,
+    "avg_cpu_percent": 369.4,
+    "cpu_cores": 8,
+    "has_gpu": false,
+    "gpu_name": null,
+    "peak_vram_mb": 0.0,
+    "peak_vram_gb": 0.0
   }
 }
